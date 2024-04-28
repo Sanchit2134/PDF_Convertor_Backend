@@ -10,7 +10,7 @@ const port = 3000;
 app.use(cors());
 //Storage create kar rahai hain
 
-const dirPath = path.join(__dirname, 'uploads');
+const dirPath = path.join('/tmp', 'uploads');
 
 if (!fs.existsSync(dirPath)) {
     fs.mkdirSync(dirPath, { recursive: true });
