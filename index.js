@@ -3,21 +3,34 @@ const multer = require('multer');
 const cors = require('cors');
 const docxToPdf = require('docx-pdf');
 const path = require('path');
+const fs = require('fs');
 const app = express();
 const port = 3000;
 
 app.use(cors());
 //Storage create kar rahai hain
+
+const dirPath = path.join(__dirname, 'uploads');
+
+if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath, { recursive: true });
+}
+
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, 'uploads')
-    },
-    filename: function (req, file, cb) {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-      cb(null, file.originalname)
-    }
+  destination: function (req, file, cb) {
+    cb(null, dirPath)
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+    cb(null, file.originalname)
+  }
+})
+
+const upload = multer({ storage: storage })
+
+  app.get('/', (req, res) => {
+    res.send('Api is working fine !');
   })
-  const upload = multer({ storage: storage })
   
   app.post('/convertor', upload.single('file'), (req, res, next)=> {
     try{
