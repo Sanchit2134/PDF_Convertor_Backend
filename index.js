@@ -27,11 +27,6 @@ const storage = multer.diskStorage({
 })
 
 const upload = multer({ storage: storage })
-
-  app.get('/', (req, res) => {
-    res.send('Api is working fine !');
-  })
-  
   app.post('/convertor', upload.single('file'), (req, res, next)=> {
     try{
         if(!req.file){
